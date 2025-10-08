@@ -4,7 +4,7 @@ from google import genai
 from google.genai.errors import APIError
 
 # ==============================
-# ⚙️ Cấu hình Trang Streamlit
+# ⚙️ CẤU HÌNH TRANG CHÍNH
 # ==============================
 st.set_page_config(
     page_title="Phân Tích Báo Cáo Tài Chính",
@@ -12,66 +12,102 @@ st.set_page_config(
     page_icon="📊",
 )
 
-# --- CSS giao diện chuyên nghiệp ---
+# --- CSS GIAO DIỆN NÂNG CẤP ---
 st.markdown("""
 <style>
+/* Nền tổng thể */
 body {
-    background-color: #f5f7fa;
+    background-color: #f0f4f8;
     font-family: 'Segoe UI', sans-serif;
 }
+
+/* Tiêu đề chính */
 .title {
     text-align: center;
     color: #004aad;
-    font-size: 30px;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 2px #a3a3a3;
 }
-.stChatContainer {
+
+/* Subheader */
+h2, .subheader {
+    color: #004aad !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    margin-top: 30px !important;
+    border-left: 6px solid #004aad;
+    padding-left: 10px;
+}
+
+/* Bảng dữ liệu */
+[data-testid="stDataFrame"] table {
+    font-size: 18px;
+}
+
+/* Chat Box */
+.chat-container {
     border-radius: 12px;
     background-color: #ffffff;
-    padding: 15px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.08);
+    font-size: 18px;
 }
+
+/* Bong bóng chat */
 .user-bubble {
     background-color: #DCF8C6;
     border-radius: 16px 16px 0 16px;
-    padding: 10px 14px;
-    margin: 5px 0;
-    max-width: 80%;
+    padding: 12px 16px;
+    margin: 10px 0;
+    max-width: 75%;
     float: right;
     clear: both;
+    font-size: 18px;
 }
+
 .bot-bubble {
     background-color: #E8E8E8;
     border-radius: 16px 16px 16px 0;
-    padding: 10px 14px;
-    margin: 5px 0;
-    max-width: 80%;
+    padding: 12px 16px;
+    margin: 10px 0;
+    max-width: 75%;
     float: left;
     clear: both;
+    font-size: 18px;
 }
+
+/* Avatar */
 .avatar {
-    width: 28px;
-    height: 28px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     vertical-align: middle;
-    margin-right: 8px;
+    margin-right: 10px;
 }
+
+/* Button chính */
 .stButton>button {
-    background-color: #004aad;
-    color: white;
-    border-radius: 8px;
-    border: none;
+    background-color: #004aad !important;
+    color: white !important;
+    border-radius: 10px !important;
+    border: none !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    padding: 10px 18px !important;
 }
 .stButton>button:hover {
-    background-color: #0066cc;
+    background-color: #0066cc !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
+# --- TIÊU ĐỀ ---
 st.markdown('<div class="title">📊 ỨNG DỤNG PHÂN TÍCH BÁO CÁO TÀI CHÍNH</div>', unsafe_allow_html=True)
 
 # ==============================
-# 📁 Hàm xử lý dữ liệu
+# 📁 HÀM XỬ LÝ DỮ LIỆU
 # ==============================
 @st.cache_data
 def process_financial_data(df):
@@ -98,7 +134,7 @@ def process_financial_data(df):
     return df
 
 # ==============================
-# 🤖 Gọi API Gemini
+# 🤖 HÀM GỌI GEMINI API
 # ==============================
 def get_ai_response(prompt, api_key, model="gemini-2.5-flash"):
     try:
@@ -111,10 +147,10 @@ def get_ai_response(prompt, api_key, model="gemini-2.5-flash"):
         return f"Lỗi không xác định: {e}"
 
 # ==============================
-# 📂 Tải và xử lý File Excel
+# 📂 TẢI FILE EXCEL
 # ==============================
 uploaded_file = st.file_uploader(
-    "📥 1. Tải file Excel Báo cáo Tài chính (Chỉ tiêu | Năm trước | Năm sau)",
+    "📥 1️⃣ Tải file Excel Báo cáo Tài chính (Chỉ tiêu | Năm trước | Năm sau)",
     type=['xlsx', 'xls']
 )
 
@@ -124,7 +160,7 @@ if uploaded_file is not None:
         df_raw.columns = ['Chỉ tiêu', 'Năm trước', 'Năm sau']
         df_processed = process_financial_data(df_raw.copy())
 
-        st.subheader("📈 2. Tốc độ Tăng trưởng & Tỷ trọng Cơ cấu Tài sản")
+        st.subheader("📈 2️⃣ Tốc độ Tăng trưởng & Tỷ trọng Cơ cấu Tài sản")
         st.dataframe(df_processed.style.format({
             'Năm trước': '{:,.0f}',
             'Năm sau': '{:,.0f}',
@@ -133,7 +169,7 @@ if uploaded_file is not None:
             'Tỷ trọng Năm sau (%)': '{:.2f}%'
         }), use_container_width=True)
 
-        st.subheader("💹 3. Các Chỉ số Tài chính Cơ bản")
+        st.subheader("💹 3️⃣ Các Chỉ số Tài chính Cơ bản")
         try:
             tsnh_n = df_processed[df_processed['Chỉ tiêu'].str.contains('TÀI SẢN NGẮN HẠN', case=False, na=False)]['Năm sau'].iloc[0]
             tsnh_n_1 = df_processed[df_processed['Chỉ tiêu'].str.contains('TÀI SẢN NGẮN HẠN', case=False, na=False)]['Năm trước'].iloc[0]
@@ -144,18 +180,18 @@ if uploaded_file is not None:
             thanh_toan_hien_hanh_N_1 = tsnh_n_1 / no_ngan_han_N_1
 
             col1, col2 = st.columns(2)
-            col1.metric("Năm trước", f"{thanh_toan_hien_hanh_N_1:.2f} lần")
-            col2.metric("Năm sau", f"{thanh_toan_hien_hanh_N:.2f} lần",
+            col1.metric("💰 Năm trước", f"{thanh_toan_hien_hanh_N_1:.2f} lần")
+            col2.metric("💰 Năm sau", f"{thanh_toan_hien_hanh_N:.2f} lần",
                         delta=f"{thanh_toan_hien_hanh_N - thanh_toan_hien_hanh_N_1:.2f}")
         except IndexError:
-            st.warning("Thiếu chỉ tiêu 'TÀI SẢN NGẮN HẠN' hoặc 'NỢ NGẮN HẠN' để tính chỉ số.")
+            st.warning("⚠️ Thiếu chỉ tiêu 'TÀI SẢN NGẮN HẠN' hoặc 'NỢ NGẮN HẠN' để tính chỉ số.")
 
-        st.subheader("🧠 4. Nhận xét Tình hình Tài chính (AI Gemini)")
+        st.subheader("🧠 4️⃣ Nhận xét Tình hình Tài chính (Gemini AI)")
         data_for_ai = df_processed.to_markdown(index=False)
-        if st.button("🚀 Gửi cho Gemini Phân tích"):
+        if st.button("🚀 Phân tích với Gemini"):
             api_key = st.secrets.get("GEMINI_API_KEY")
             if api_key:
-                with st.spinner("Đang phân tích bằng Gemini..."):
+                with st.spinner("⏳ Gemini đang phân tích dữ liệu..."):
                     prompt = f"""
                     Bạn là chuyên gia phân tích tài chính. Dưới đây là bảng dữ liệu:
                     {data_for_ai}
@@ -165,15 +201,15 @@ if uploaded_file is not None:
                     st.markdown("**📋 Kết quả từ Gemini:**")
                     st.info(ai_result)
             else:
-                st.error("Chưa có GEMINI_API_KEY trong Streamlit Secrets.")
+                st.error("❌ Chưa có GEMINI_API_KEY trong Streamlit Secrets.")
 
     except Exception as e:
-        st.error(f"Lỗi xử lý file: {e}")
+        st.error(f"❌ Lỗi xử lý file: {e}")
 else:
-    st.info("Vui lòng tải lên file Excel để bắt đầu phân tích.")
+    st.info("📂 Vui lòng tải lên file Excel để bắt đầu phân tích.")
 
 # ==============================
-# 💬 5. KHUNG CHAT GEMINI (Messenger Style)
+# 💬 5️⃣ KHUNG CHAT GEMINI (CHỮ TO, AVATAR)
 # ==============================
 st.markdown("---")
 st.subheader("💬 Trò chuyện trực tiếp với Gemini AI")
@@ -185,7 +221,9 @@ else:
     if "messages" not in st.session_state:
         st.session_state["messages"] = []
 
-    # Hiển thị lịch sử chat
+    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+
+    # Hiển thị hội thoại
     for msg in st.session_state["messages"]:
         if msg["role"] == "user":
             st.markdown(
@@ -198,9 +236,10 @@ else:
                 unsafe_allow_html=True
             )
 
-    # Ô nhập câu hỏi
-    user_input = st.text_input("💭 Nhập câu hỏi của bạn với Gemini:")
-    if st.button("Gửi câu hỏi 🚀"):
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    user_input = st.text_input("💭 Nhập câu hỏi của bạn với Gemini:", key="chat_input")
+    if st.button("📨 Gửi câu hỏi"):
         if user_input.strip():
             st.session_state["messages"].append({"role": "user", "content": user_input})
             with st.spinner("Gemini đang trả lời..."):
