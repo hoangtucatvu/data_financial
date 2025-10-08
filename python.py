@@ -212,7 +212,7 @@ else:
 # 💬 5️⃣ KHUNG CHAT GEMINI (CHỮ TO, AVATAR)
 # ==============================
 st.markdown("---")
-st.subheader("💬 Trò chuyện trực tiếp với Gemini AI")
+st.subheader("💬 ChatBot Trả Lời Khách Hàng")
 
 api_key = st.secrets.get("GEMINI_API_KEY")
 if not api_key:
